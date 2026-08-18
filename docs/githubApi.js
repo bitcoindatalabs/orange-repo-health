@@ -1,6 +1,6 @@
 /* githubApi.js */
 
-export class GitHubAPI {
+class GitHubAPI {
     constructor() {
         this.baseUrl = 'https://api.github.com';
         this.token = localStorage.getItem('github_pat') || null;

@@ -1,7 +1,5 @@
 /* app.js */
 
-import { GitHubAPI } from './githubApi.js';
-
 document.addEventListener('DOMContentLoaded', () => {
     const api = new GitHubAPI();
 
