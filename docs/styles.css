@@ -2,6 +2,15 @@
 
 :root {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  
+  /* Brand Colors from Ecosystem Map */
+  --primary: #E8916B; /* Brand Terracotta */
+  --primary-dark: #d67e54;
+  --primary-gradient-start: #E8916B;
+  --primary-gradient-end: #d67e54;
+  
+  --primary-bg-hover: rgba(232, 145, 107, 0.1);
+  --primary-focus-shadow: rgba(232, 145, 107, 0.2);
 }
 
 body {
@@ -32,7 +41,7 @@ body {
 .search-section h2 {
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
-  background: linear-gradient(90deg, #f7931a, #ffc000);
+  background: linear-gradient(90deg, var(--primary-gradient-start), var(--primary-gradient-end));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 700;
@@ -66,8 +75,8 @@ body {
 }
 
 .input-wrapper:focus-within {
-  border-color: #f7931a;
-  box-shadow: 0 0 0 3px rgba(247, 147, 26, 0.1);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-focus-shadow);
 }
 
 .input-wrapper input {
@@ -85,7 +94,7 @@ body {
 }
 
 .btn-primary {
-  background-color: #f7931a;
+  background-color: var(--primary);
   color: white;
   border: none;
   border-radius: 8px;
@@ -98,7 +107,7 @@ body {
 }
 
 .btn-primary:hover {
-  background-color: #e68515;
+  background-color: var(--primary-dark);
 }
 
 .btn-secondary {
@@ -193,8 +202,8 @@ body {
 
 .featured-card {
   grid-column: 1 / -1;
-  background: linear-gradient(135deg, rgba(247, 147, 26, 0.05) 0%, rgba(247, 147, 26, 0.15) 100%);
-  border-color: rgba(247, 147, 26, 0.3);
+  background: linear-gradient(135deg, rgba(232, 145, 107, 0.05) 0%, rgba(232, 145, 107, 0.15) 100%);
+  border-color: rgba(232, 145, 107, 0.3);
 }
 
 .card-header {
@@ -239,7 +248,7 @@ body {
 .score-value {
   font-size: 3rem;
   font-weight: 800;
-  color: #f7931a;
+  color: var(--primary);
 }
 
 .score-max {
@@ -257,7 +266,7 @@ body {
 
 .progress-bar-fill {
   height: 100%;
-  background-color: #f7931a;
+  background-color: var(--primary);
   width: 0%;
   transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
