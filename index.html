@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orange Repo Health</title>
+
+    <!-- Bitcoin Data Labs styles -->
+    <link rel="stylesheet" href="https://bitcoindatalabs.org/styles/styles.css"
+        onerror="this.onerror=null; this.href='https://sorukumar.github.io/Bitcoin-Data-Labs/styles/styles.css'">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Modern Typography: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Local styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="visualization-page">
+    <!-- Bitcoin Data Labs Header -->
+    <div id="header"></div>
+
+    <div id="container">
+        <!-- Main Content for Repo Health -->
+        <main class="main-content">
+            <section class="search-section">
+                <h2>Analyze Open Source Health</h2>
+                <p>Enter a GitHub repository to get instant health metrics.</p>
+                <form id="search-form" class="search-form">
+                    <div class="search-wrapper input-wrapper">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="repo-input" placeholder="e.g., bitcoin/bitcoin" required autocomplete="off" />
+                    </div>
+                    <button type="submit" class="btn-primary">Analyze</button>
+                    <button type="button" id="settings-btn" class="btn-secondary" title="API Settings"><i class="fas fa-cog"></i></button>
+                </form>
+                <div id="error-message" class="error-message" style="display: none;"></div>
+            </section>
+
+            <!-- Loading State -->
+            <div id="loading-indicator" class="loading-state" style="display: none;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 32px; color: var(--primary); margin-bottom: 12px;"></i>
+                <div style="color: var(--text-primary); font-weight: 500;">Analyzing repository health...</div>
+            </div>
+
+            <!-- Dashboard -->
+            <section id="dashboard" class="dashboard" style="display: none;">
+                <div class="repo-header">
+                    <h3 id="repo-name">bitcoin/bitcoin</h3>
+                    <p id="repo-description" class="repo-description">Bitcoin Core integration/staging tree</p>
+                    <div class="repo-badges">
+                        <span class="badge"><i class="fas fa-star"></i> <span id="stat-stars">0</span></span>
+                        <span class="badge"><i class="fas fa-code-branch"></i> <span id="stat-forks">0</span></span>
+                        <span class="badge">Last update: <span id="stat-updated">N/A</span></span>
+                    </div>
+                </div>
+
+                <div class="metrics-grid">
+                    <!-- Health Score Card -->
+                    <div class="metric-card featured-card">
+                        <div class="card-header">
+                            <h4>Vitality Score</h4>
+                            <div class="tooltip-icon" title="Overall health based on activity, community size, and maintenance"><i class="fas fa-question-circle"></i></div>
+                        </div>
+                        <div class="card-body">
+                            <div class="score-display">
+                                <span id="vitality-score" class="score-value">--</span>
+                                <span class="score-max">/100</span>
+                            </div>
+                            <div class="progress-bar-bg">
+                                <div id="vitality-progress" class="progress-bar-fill"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contributor Diversity -->
+                    <div class="metric-card">
+                        <div class="card-header">
+                            <h4>Active Contributors</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="stat-large" id="metric-contributors">--</div>
+                            <p class="stat-subtitle">Recent unique committers</p>
+                        </div>
+                    </div>
+
+                    <!-- Issue Resolution -->
+                    <div class="metric-card">
+                        <div class="card-header">
+                            <h4>Issue Closure Rate</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="stat-large" id="metric-issues">--%</div>
+                            <p class="stat-subtitle"><span id="issues-open">0</span> open / <span id="issues-closed">0</span> closed</p>
+                        </div>
+                    </div>
+
+                    <!-- PR Review Ratio -->
+                    <div class="metric-card">
+                        <div class="card-header">
+                            <h4>Recent PR Merge Rate</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="stat-large" id="metric-prs">--%</div>
+                            <p class="stat-subtitle">Last 30 PRs evaluated</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal" style="display: none;">
+        <div class="modal-content panel-card">
+            <div class="modal-header">
+                <h3><i class="fas fa-cog"></i> Settings</h3>
+                <button id="close-modal-btn" class="close-btn"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="pat-input">GitHub Personal Access Token (Optional)</label>
+                    <input type="password" id="pat-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" />
+                    <p class="help-text">Unauthenticated requests are limited to 60 per hour. Add a token to increase this to 5,000 per hour. Your token is stored locally in your browser.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="save-settings-btn" class="btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bitcoin Data Labs Footer -->
+    <div id="footer"></div>
+
+    <!-- Bitcoin Data Labs App Components -->
+    <script>
+        function loadBitcoinLabsScript(primarySrc, fallbackSrc, callback) {
+            const script = document.createElement('script');
+            script.src = primarySrc;
+            script.onload = callback;
+            script.onerror = () => {
+                const fallback = document.createElement('script');
+                fallback.src = fallbackSrc;
+                fallback.onload = callback;
+                document.head.appendChild(fallback);
+            };
+            document.head.appendChild(script);
+        }
+
+        function getAppHomeUrl() {
+            return window.location.origin + window.location.pathname.replace(/\/[^\/]*$/, '/');
+        }
+
+        loadBitcoinLabsScript(
+            'https://bitcoindatalabs.org/components/app-components.js',
+            'https://sorukumar.github.io/Bitcoin-Data-Labs/components/app-components.js',
+            () => {
+                const appConfig = {
+                    isApp: true,
+                    appName: 'orange-repo-health',
+                    appHomeUrl: getAppHomeUrl()
+                };
+
+                if (window.BitcoinLabsApp && typeof BitcoinLabsApp.init === 'function') {
+                    BitcoinLabsApp.init(appConfig);
+                }
+
+                if (window.BitcoinLabsAppComponents && typeof BitcoinLabsAppComponents.init === 'function') {
+                    BitcoinLabsAppComponents.init(appConfig);
+                }
+            }
+        );
+    </script>
+
+    <!-- Load Local Scripts -->
+    <script src="githubApi.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
