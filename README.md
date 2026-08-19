@@ -1,14 +1,14 @@
-# 📊 Orange Repo Health
+# 📊 Real-Time Open Source Diagnostics
 
-**Orange Repo Health** is a lightweight, frontend-only web application designed to instantly analyze and display the health metrics of any open-source GitHub repository. It is part of the Bitcoin Data Labs suite of tools.
+**Repo Health** is a real-time diagnostic tool for auditing open-source repository maintenance, developer activity, and review rigor, built for the Bitcoin ecosystem.
 
 ## 🚀 Features
 
 - **Instant Health Metrics**: View Stars, Forks, and Last Update dates.
-- **Contributor Diversity**: Get an estimate of active contributors.
-- **Issue Resolution**: View the ratio of open to closed issues.
+- **Active Developer Base**: Get an estimate of recent active contributors.
+- **Issue Resolution Velocity**: View the ratio of open to closed issues.
 - **PR Merge Rate**: Track the merge success rate of recent Pull Requests.
-- **Vitality Score**: A custom heuristic score from 0-100 indicating the overall health and activity level of the repository.
+- **Maintenance Health**: Transparent health badges indicating the overall maintenance and activity level of the repository based on raw metrics.
 
 ## 🛠️ Tech Stack
 

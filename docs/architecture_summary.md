@@ -39,19 +39,37 @@ This class handles all asynchronous interactions with the GitHub API.
 ### 3. Application Logic (`app.js`)
 - Acts as the controller linking the UI to the Data Layer.
 - Parses user inputs (supporting both `owner/repo` formats and full GitHub URLs).
+- **Comparison Engine**: Supports parallel fetching and rendering of two repositories simultaneously, highlighting the "winner" for each metric.
 - **Vitality Score Algorithm**: Calculates a heuristic score (0-100) combining issue closure rates, PR merge rates, active contributors, and recent activity timestamps.
 
-## 🚀 Planned Features (Roadmap)
+### 4. Advanced Insights (GraphQL)
+- Employs a hybrid architecture that conditionally unlocks advanced metrics when a Personal Access Token is detected.
+- Executes an optimized GraphQL query to calculate deep metrics:
+  - **Bus Factor**: Evaluates key person risk by analyzing the author distribution of the last 100 commits.
+  - **Code Review Rigor**: Calculates the average number of reviews and inline discussion threads per merged PR.
 
-To further enhance the capability of Orange Repo Health, the following features are planned for future iterations:
+### 5. Caching Layer
+- Utilizes `sessionStorage` with a 1-hour expiration policy.
+- Caches authenticated and unauthenticated queries separately.
+- Prevents redundant API calls for recently searched repositories, preserving the user's GitHub API rate limit.
 
-1. **Repository Comparison Tool**: 
-   - Allow users to input two repositories simultaneously to generate a side-by-side comparison of their health metrics.
-2. **Historical Trends (Time-Series Data)**: 
-   - Integrate with the GitHub GraphQL API to fetch historical commit and issue data, displaying activity trends over time using a charting library (like Chart.js or D3).
-3. **Ecosystem Integration**: 
+## 🚀 Planned Features & Metrics Roadmap
+
+To further enhance the capability of Orange Repo Health, the following features and creative metrics are planned for future iterations:
+
+1. **Historical Trends (Time-Series Data)**: 
+   - Fetch historical commit and issue data, displaying activity trends over time using a charting library (like Chart.js or D3).
+2. **Ecosystem Integration**: 
    - Add deep links from `orange-ecosystem-map` nodes directly to this tool to instantly view the health of mapped repositories.
-4. **Caching & Rate Limit Optimization**: 
-   - Implement `sessionStorage` or `IndexedDB` caching to prevent redundant API calls for recently searched repositories, saving API rate limits.
-5. **Advanced Security & Dependency Metrics**: 
+3. **Advanced Security & Dependency Metrics**: 
    - Surface Dependabot alerts and open security vulnerabilities if the user provides an authenticated token with repository access.
+4. **Maintainer Responsiveness (Time-to-First-Touch)**:
+   - Measure the median time it takes for a newly opened Issue or PR to receive a comment to gauge active community support.
+5. **Issue Staleness (The Graveyard Ratio)**:
+   - Track the percentage of open issues untouched in the last 6 months to identify overwhelming technical debt or maintainer burnout.
+6. **Release Cadence (Shipping Velocity)**:
+   - Analyze the median number of days between the last 5-10 releases to evaluate predictable maintenance cycles.
+7. **Community Engagement Density**:
+   - Evaluate non-code interactions (e.g., emoji reactions on issues) to measure the active user base beyond just core developers.
+8. **First-Time Contributor Success Rate**:
+   - Determine the percentage of PRs opened by first-time contributors that are successfully merged, indicating a welcoming ecosystem.
