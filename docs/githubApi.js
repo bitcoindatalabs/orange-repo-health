@@ -14,6 +14,9 @@ class GitHubAPI {
             this.token = null;
             localStorage.removeItem('github_pat');
         }
+        
+        // Clear cached data (like 0s from previous failed auth attempts)
+        sessionStorage.clear();
     }
 
     getToken() {
