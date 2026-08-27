@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Orange Repo Health</title>
+    <title>Orange Repo Health — Bitcoin Data Labs</title>
+    <meta name="description" content="Instantly evaluate developer activity, review rigor, and maintenance risks for any open-source GitHub repository. Compare repos side-by-side with advanced governance metrics.">
 
     <!-- Bitcoin Data Labs styles -->
     <link rel="stylesheet" href="https://bitcoindatalabs.org/styles/styles.css"
@@ -71,130 +72,86 @@
             <!-- Comparison Container -->
             <div id="dashboard-container" class="dashboard-container" style="display: none;"></div>
 
-            <!-- Dashboard Template -->
+            <!-- Dashboard Template (Single Repo Mode) -->
             <template id="dashboard-template">
                 <section class="dashboard">
-                    <div class="repo-header">
-                        <h3 class="repo-name">bitcoin/bitcoin</h3>
-                        <p class="repo-description">Bitcoin Core integration/staging tree</p>
-                        <div class="repo-badges">
-                            <span class="badge"><i class="fas fa-star"></i> <span class="stat-stars">0</span></span>
-                            <span class="badge"><i class="fas fa-code-branch"></i> <span class="stat-forks">0</span></span>
-                            <span class="badge">Created: <span class="stat-created">N/A</span></span>
-                            <span class="badge">Last update: <span class="stat-updated">N/A</span></span>
+                    <!-- Tier 1: Hero Health Card -->
+                    <div class="hero-health-card">
+                        <div class="hero-content">
+                            <div class="hero-info">
+                                <h3 class="repo-name">owner/repo</h3>
+                                <p class="repo-description">Repository description</p>
+                                <div class="repo-badges">
+                                    <span class="badge"><i class="fas fa-star"></i> <span class="stat-stars">0</span></span>
+                                    <span class="badge"><i class="fas fa-code-branch"></i> <span class="stat-forks">0</span></span>
+                                    <span class="badge">Created: <span class="stat-created">N/A</span></span>
+                                    <span class="badge">Last update: <span class="stat-updated">N/A</span></span>
+                                </div>
+                            </div>
+                            <div class="hero-health">
+                                <span class="health-badge-pill health-dormant">--</span>
+                                <p class="health-summary-line">Analyzing...</p>
+                            </div>
                         </div>
                     </div>
 
-
-
-
+                    <!-- Tier 2: Activity & Growth -->
                     <div class="dashboard-section">
-                        <h3 class="section-title">Community & Velocity</h3>
+                        <h3 class="section-title">Activity & Growth</h3>
                         <div class="metrics-grid">
-                            <!-- Total Contributors -->
-                            <div class="metric-card metric-total-contributors-card">
-                                <div class="card-header">
-                                    <h4>Total Contributors</h4>
-                                </div>
-                                <div class="card-body">
-                                    <div class="stat-large metric-total-contributors">--</div>
-                                    <p class="stat-subtitle">All-time distinct contributors</p>
-                                </div>
-                            </div>
-
-                            <!-- Code Velocity -->
                             <div class="metric-card metric-velocity-card">
-                                <div class="card-header">
-                                    <h4>Code Velocity</h4>
-                                </div>
+                                <div class="card-header"><h4>Code Velocity</h4></div>
                                 <div class="card-body">
                                     <div class="stat-large metric-velocity-commits">--</div>
                                     <p class="stat-subtitle">Commits in last 4 weeks</p>
-                                    <div class="sparkline-container" id="velocity-sparkline">
-                                        <!-- CSS Sparkline Bars will be injected here -->
-                                    </div>
+                                    <span class="qualitative-label velocity-label"></span>
+                                    <div class="sparkline-container" id="velocity-sparkline"></div>
                                 </div>
                             </div>
-                            
-                            <!-- PR Merge Rate -->
                             <div class="metric-card metric-prs-card">
-                                <div class="card-header">
-                                    <h4>Recent PR Merge Rate</h4>
-                                </div>
+                                <div class="card-header"><h4>PR Acceptance Rate</h4></div>
                                 <div class="card-body">
                                     <div class="stat-large metric-prs">--%</div>
-                                    <p class="stat-subtitle">Last 30 PRs evaluated</p>
+                                    <p class="stat-subtitle">Based on the 30 most recently opened PRs</p>
                                     <div class="progress-bar-container">
                                         <div class="progress-bar-fill metric-prs-bar" style="width: 0%;"></div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="metric-card metric-total-contributors-card">
+                                <div class="card-header"><h4>Contributor Base</h4></div>
+                                <div class="card-body">
+                                    <div class="stat-large metric-total-contributors">--</div>
+                                    <p class="stat-subtitle">All-time distinct contributors</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
+                    <!-- Tier 2: Governance & Quality -->
                     <div class="dashboard-section mt-4">
-                        <h3 class="section-title">Maintenance Burden</h3>
-                        <div class="metrics-grid">
-                            <!-- Issue Backlog Management -->
-                            <div class="metric-card metric-issues-card">
-                                <div class="card-header">
-                                    <h4>Issue Backlog Management</h4>
-                                    <div class="tooltip-icon" data-tooltip="Percentage of all-time issues that are closed."><i class="fas fa-question-circle"></i></div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="stat-large metric-issues">--%</div>
-                                    <p class="stat-subtitle"><span class="issues-open">0</span> open / <span class="issues-closed">0</span> closed</p>
-                                    <div class="progress-bar-container">
-                                        <div class="progress-bar-fill metric-issues-bar" style="width: 0%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Issue Staleness -->
-                            <div class="metric-card metric-stale-card">
-                                <div class="card-header">
-                                    <h4>The Graveyard Ratio</h4>
-                                    <div class="tooltip-icon" data-tooltip="Percentage of currently open issues that haven't had any activity in over 6 months."><i class="fas fa-question-circle"></i></div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="stat-large metric-stale-ratio">--%</div>
-                                    <p class="stat-subtitle"><span class="issues-stale">0</span> stale open issues</p>
-                                    <div class="progress-bar-container">
-                                        <div class="progress-bar-fill metric-stale-bar bg-warning" style="width: 0%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="advanced-insights-section mt-4">
-                        <h3 class="section-title">Risk Assessment (Advanced)</h3>
-                        <div id="advanced-metrics-container" class="advanced-metrics-container locked">
-                            <!-- Locked Overlay -->
+                        <h3 class="section-title">Governance & Quality</h3>
+                        <div class="advanced-metrics-container locked">
                             <div class="lock-overlay">
                                 <h4>Preview Sample Report</h4>
-                                <p>Unlock Advanced Insights with a GitHub Token to see real data for this repository.</p>
+                                <p>Unlock Governance metrics with a GitHub Token to see real data.</p>
                                 <div class="overlay-actions">
-                                    <button type="button" class="view-sample-btn btn-secondary">View Sample (bitcoin/bitcoin)</button>
+                                    <button type="button" class="view-sample-btn btn-secondary">View Sample</button>
                                     <button type="button" class="unlock-advanced-btn btn-primary">Add Token</button>
                                 </div>
                             </div>
-                            
-                            <!-- Unlocked Content -->
                             <div class="advanced-grid metrics-grid">
-                                <!-- Active Maintainers -->
-                                <div class="metric-card metric-active-maintainers-card">
+                                <div class="metric-card metric-ttm-card">
                                     <div class="card-header">
-                                        <h4>Active Maintainers</h4>
-                                        <div class="tooltip-icon" data-tooltip="Number of unique people who merged the last 100 PRs."><i class="fas fa-question-circle"></i></div>
+                                        <h4>Time to Merge</h4>
+                                        <div class="tooltip-icon" data-tooltip="Average days to merge a PR (last 100 merged)."><i class="fas fa-question-circle"></i></div>
                                     </div>
                                     <div class="card-body">
-                                        <div class="stat-large metric-active-maintainers">--</div>
-                                        <p class="stat-subtitle active-maintainers-subtitle">Across last 100 merged PRs</p>
+                                        <div class="stat-large metric-ttm">--</div>
+                                        <p class="stat-subtitle ttm-subtitle">Avg over last 100 merged PRs</p>
+                                        <span class="qualitative-label ttm-label" style="display: none;"></span>
                                     </div>
                                 </div>
-
-                                <!-- Bus Factor -->
                                 <div class="metric-card metric-bus-factor-card">
                                     <div class="card-header">
                                         <h4>Bus Factor</h4>
@@ -203,18 +160,100 @@
                                     <div class="card-body">
                                         <div class="stat-large metric-bus-factor">--</div>
                                         <p class="stat-subtitle bus-factor-subtitle">High redundancy</p>
+                                        <span class="qualitative-label bus-factor-label"></span>
                                     </div>
                                 </div>
-
-                                <!-- Review Rigor -->
+                                <div class="metric-card metric-active-maintainers-card">
+                                    <div class="card-header">
+                                        <h4>Active Maintainers</h4>
+                                        <div class="tooltip-icon" data-tooltip="Unique developers who merged the last 100 PRs."><i class="fas fa-question-circle"></i></div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="stat-large metric-active-maintainers">--</div>
+                                        <p class="stat-subtitle active-maintainers-subtitle">Distinct devs who merged the last 100 PRs</p>
+                                    </div>
+                                </div>
                                 <div class="metric-card metric-review-rigor-card">
                                     <div class="card-header">
-                                        <h4>Code Review Rigor</h4>
-                                        <div class="tooltip-icon" data-tooltip="Average number of reviews and review threads per PR (last 100 merged)."><i class="fas fa-question-circle"></i></div>
+                                        <h4>Review Depth</h4>
+                                        <div class="tooltip-icon" data-tooltip="Average number of reviews and discussion threads per merged PR."><i class="fas fa-question-circle"></i></div>
                                     </div>
                                     <div class="card-body">
                                         <div class="stat-large metric-review-rigor">--</div>
-                                        <p class="stat-subtitle review-rigor-subtitle">Avg over last 100 merged PRs</p>
+                                        <p class="stat-subtitle review-rigor-subtitle">Avg per PR (last 100 merged)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tier 3: Deep Diagnostics (Collapsible) -->
+                    <div class="dashboard-section deep-diagnostics-section mt-4">
+                        <button class="section-toggle-btn" type="button">
+                            <h3 class="section-title">Deep Diagnostics</h3>
+                            <i class="fas fa-chevron-down toggle-icon"></i>
+                        </button>
+                        <div class="collapsible-content">
+                            <div class="metrics-grid">
+                                <div class="metric-card metric-issues-card">
+                                    <div class="card-header">
+                                        <h4>Issue Resolution Rate</h4>
+                                        <div class="tooltip-icon" data-tooltip="Percentage of all-time issues that are closed."><i class="fas fa-question-circle"></i></div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="stat-large metric-issues">--%</div>
+                                        <p class="stat-subtitle"><span class="issues-open">0</span> open / <span class="issues-closed">0</span> closed</p>
+                                        <div class="progress-bar-container">
+                                            <div class="progress-bar-fill metric-issues-bar" style="width: 0%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="metric-card metric-stale-card">
+                                    <div class="card-header">
+                                        <h4>Abandoned Issues</h4>
+                                        <div class="tooltip-icon" data-tooltip="Percentage of open issues with no activity in 6+ months."><i class="fas fa-question-circle"></i></div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="stat-large metric-stale-ratio">--%</div>
+                                        <p class="stat-subtitle"><span class="issues-stale">0</span> stale open issues</p>
+                                        <div class="progress-bar-container">
+                                            <div class="progress-bar-fill metric-stale-bar bg-warning" style="width: 0%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Lifetime Scale Section -->
+                            <h3 class="section-title mt-4" style="font-size: 1rem; color: var(--text-secondary); margin-bottom: 1rem;">Lifetime Scale</h3>
+                            <div class="metrics-grid">
+                                <div class="metric-card metric-lifetime-commits-card">
+                                    <div class="card-header">
+                                        <h4>Total Commits</h4>
+                                        <div class="tooltip-icon" data-tooltip="All-time commits on the default branch."><i class="fas fa-question-circle"></i></div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="stat-large metric-lifetime-commits">--</div>
+                                        <p class="stat-subtitle">All-time default branch</p>
+                                    </div>
+                                </div>
+                                <div class="metric-card metric-total-issues-card">
+                                    <div class="card-header">
+                                        <h4>Total Issues Logged</h4>
+                                        <div class="tooltip-icon" data-tooltip="All-time open + closed issues."><i class="fas fa-question-circle"></i></div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="stat-large metric-total-issues">--</div>
+                                        <p class="stat-subtitle">All-time open & closed</p>
+                                    </div>
+                                </div>
+                                <div class="metric-card metric-age-card">
+                                    <div class="card-header">
+                                        <h4>Repository Age</h4>
+                                        <div class="tooltip-icon" data-tooltip="Years since repository creation."><i class="fas fa-question-circle"></i></div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="stat-large metric-age">--</div>
+                                        <p class="stat-subtitle">Since creation</p>
                                     </div>
                                 </div>
                             </div>
@@ -235,7 +274,12 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="pat-input">GitHub Personal Access Token (Optional)</label>
-                    <input type="password" id="pat-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" />
+                    <div class="password-wrapper">
+                        <input type="password" id="pat-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" />
+                        <button type="button" id="toggle-pat-visibility" class="toggle-password-btn" aria-label="Toggle token visibility">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
                     <p class="help-text">Unauthenticated requests are limited to 60 per hour. Add a token to increase this to 5,000 per hour. Your token is stored locally in your browser.</p>
                 </div>
             </div>

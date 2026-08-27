@@ -34,7 +34,7 @@ class GitHubAPI {
     }
 
     async _withCache(key, fetcher) {
-        const fullKey = `repo_health_cache_${key}_${this.token ? 'auth' : 'unauth'}`;
+        const fullKey = `repo_health_v2_cache_${key}_${this.token ? 'auth' : 'unauth'}`;
         const cached = sessionStorage.getItem(fullKey);
         if (cached) {
             try {
@@ -50,13 +50,16 @@ class GitHubAPI {
 
         const data = await fetcher();
         
-        try {
-            sessionStorage.setItem(fullKey, JSON.stringify({
-                timestamp: Date.now(),
-                data: data
-            }));
-        } catch (e) {
-            // Ignore storage full errors
+        // Don't cache null/undefined values (API still computing)
+        if (data !== null && data !== undefined) {
+            try {
+                sessionStorage.setItem(fullKey, JSON.stringify({
+                    timestamp: Date.now(),
+                    data: data
+                }));
+            } catch (e) {
+                // Ignore storage full errors
+            }
         }
         
         return data;
@@ -85,7 +88,7 @@ class GitHubAPI {
             const response = await fetch(`${this.baseUrl}/repos/${owner}/${repo}/contributors?per_page=1&anon=1`, {
                 headers: this.getHeaders()
             });
-            if (!response.ok) return 0;
+            if (response.status === 202 || !response.ok) return null;
             
             const linkHeader = response.headers.get('Link');
             if (linkHeader) {
@@ -119,11 +122,9 @@ class GitHubAPI {
                 headers: this.getHeaders()
             });
             
-            if (!response.ok) {
-                // If 202 Accepted, GitHub is caching it in the background. Return empty for now.
-                if (response.status === 202) return [];
-                return [];
-            }
+            // 202 = GitHub is computing stats in background. Return null (don't cache).
+            if (response.status === 202) return null;
+            if (!response.ok) return null;
             
             const data = await response.json();
             // Expected format: array of 52 weeks { days: [], total: x, week: timestamp }
@@ -204,6 +205,7 @@ class GitHubAPI {
                   target {
                     ... on Commit {
                       history(first: 100) {
+                        totalCount
                         nodes {
                           committedDate
                           author {
@@ -222,6 +224,8 @@ class GitHubAPI {
                 }
                 pullRequests(states: MERGED, last: 100, orderBy: {field: UPDATED_AT, direction: DESC}) {
                   nodes {
+                    createdAt
+                    mergedAt
                     mergedBy {
                       login
                     }
