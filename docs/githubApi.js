@@ -25,7 +25,7 @@ class GitHubAPI {
             'Accept': 'application/vnd.github.v3+json',
         };
         if (this.token) {
-            headers['Authorization'] = `token ${this.token}`;
+            headers['Authorization'] = `Bearer ${this.token}`;
         }
         return headers;
     }
@@ -67,7 +67,8 @@ class GitHubAPI {
             
             if (!response.ok) {
                 if (response.status === 404) throw new Error('Repository not found');
-                if (response.status === 403) throw new Error('API Rate Limit Exceeded. Please add a Personal Access Token in Settings.');
+                if (response.status === 401) throw new Error('Unauthorized: Invalid GitHub Token. Please verify your token is correct and not expired.');
+                if (response.status === 403) throw new Error('API Rate Limit Exceeded or Forbidden. Please check your Personal Access Token.');
                 throw new Error('Failed to fetch repository data');
             }
             
