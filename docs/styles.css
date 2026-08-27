@@ -269,10 +269,10 @@ body {
    ========================================= */
 .hero-health-card {
   background: linear-gradient(135deg, var(--bg-primary, #FDFBF9) 0%, var(--bg-secondary, #F5F1EE) 100%);
-  border: 1px solid var(--border, rgba(42, 51, 66, 0.12));
+  border: 1px solid rgba(42, 51, 66, 0.08);
   border-radius: 16px;
   padding: 2rem;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
   box-shadow: 0 4px 24px rgba(0,0,0,0.06);
   transition: box-shadow 0.3s ease;
 }
@@ -390,13 +390,15 @@ body {
 }
 
 .section-title {
-  font-size: 1.15rem;
+  font-family: var(--bdl-font-serif);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
   color: var(--text-primary);
   border-bottom: 2px solid var(--border, rgba(42, 51, 66, 0.12));
   padding-bottom: 0.5rem;
-  margin-bottom: 1rem;
-  font-family: var(--bdl-font-serif);
-  letter-spacing: 0.01em;
+  margin-bottom: 1.25rem;
 }
 
 .mt-4 {
@@ -411,10 +413,10 @@ body {
 
 .metric-card {
   background: var(--surface, #ffffff);
-  border: 1px solid var(--border, rgba(42, 51, 66, 0.12));
+  border: 1px solid rgba(42, 51, 66, 0.06);
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.03);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -438,15 +440,17 @@ body {
 
 .card-header h4 {
   margin: 0;
+  font-family: var(--bdl-font-serif);
   font-size: 0.95rem;
-  color: var(--text-secondary, #4b5563);
+  color: var(--text-primary, #111827);
   font-weight: 600;
 }
 
 .stat-large {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
   color: var(--text-primary, #111827);
+  line-height: 1.1;
   margin-bottom: 0.25rem;
 }
 
